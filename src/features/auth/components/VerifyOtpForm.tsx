@@ -22,8 +22,10 @@ import {
 } from '@/components/ui/card';
 
 import { useVerifyRegisterOtpMutation } from '@/features/auth/api/authApi';
+import { useGuestGuard } from '@/features/auth/hooks';
 
 function VerifyOtpFormContent() {
+  useGuestGuard();
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');

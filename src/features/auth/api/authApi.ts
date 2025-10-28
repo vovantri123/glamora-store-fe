@@ -1,5 +1,5 @@
 import { baseApi } from '@/lib/api/baseApi';
-import type { ApiResponse } from '@/types/api';
+import type { ApiResponse } from '@/types/api.type';
 import type {
   LoginRequest,
   LoginResponse,

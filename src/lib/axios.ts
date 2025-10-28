@@ -1,5 +1,8 @@
 import axios from 'axios';
+
 import { toast } from 'sonner';
+import { logout } from '@/features/auth/store/authSlice';
+import { resetApiState } from './api/baseApi';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
@@ -37,14 +40,18 @@ axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
     const now = Date.now();
 
     if (error.response?.status === 401 || error.response?.status === 403) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('accessToken');
-        sessionStorage.removeItem('accessToken');
-        localStorage.removeItem('user');
+        // Dynamic import store to avoid circular dependency
+        const { makeStore } = await import('./store');
+        const store = makeStore();
+
+        store.dispatch(logout());
+        store.dispatch(resetApiState());
+
         window.location.href = '/login';
       }
     } else if (!error.response) {

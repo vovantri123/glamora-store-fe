@@ -22,8 +22,10 @@ import {
 } from '@/components/ui/card';
 
 import { useResetPasswordMutation } from '@/features/auth/api/authApi';
+import { useGuestGuard } from '@/features/auth/hooks';
 
 function ResetPasswordFormContent() {
+  useGuestGuard();
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');

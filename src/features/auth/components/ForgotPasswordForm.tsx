@@ -16,10 +16,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useGuestGuard } from '@/features/auth/hooks';
 
 import { useForgotPasswordMutation } from '@/features/auth/api/authApi';
 
 export function ForgotPasswordForm() {
+  useGuestGuard();
   const router = useRouter();
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const [email, setEmail] = useState('');

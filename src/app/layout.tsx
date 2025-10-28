@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Glamora Store - Fashion E-Commerce</title>
+        <title>Glamora Store</title>
         <meta name="description" content="Your premium fashion destination" />
       </head>
       <body
@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <StoreProvider>
           {children}
-          <Toaster />
+          <Toaster position="bottom-right" />
         </StoreProvider>
       </body>
     </html>

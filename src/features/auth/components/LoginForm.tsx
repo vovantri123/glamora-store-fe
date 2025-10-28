@@ -26,15 +26,17 @@ import {
   setLoading,
   setError,
 } from '@/features/auth/store/authSlice';
-import type { ApiResponse } from '@/types/api';
+import type { ApiResponse } from '@/types/api.type';
 import type { LoginResponse } from '@/features/auth/types/auth.types';
+import { useGuestGuard } from '@/features/auth/hooks/useAuthGuard';
 
 export function LoginForm() {
+  useGuestGuard(); // Redirect to dashboard if already authenticated
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
 
   const [formData, setFormData] = useState({
     email: '',

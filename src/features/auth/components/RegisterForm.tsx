@@ -19,8 +19,10 @@ import {
 } from '@/components/ui/card';
 
 import { useRegisterMutation } from '@/features/auth/api/authApi';
+import { useGuestGuard } from '@/features/auth/hooks/useAuthGuard';
 
 export function RegisterForm() {
+  useGuestGuard(); // Redirect to dashboard if already authenticated
   const router = useRouter();
   const [register, { isLoading }] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
