@@ -63,6 +63,10 @@ export function LoginForm() {
           authApi.endpoints.getProfile.initiate()
         ).unwrap();
 
+        if (!profileResult.data) {
+          throw new Error('Failed to fetch user profile');
+        }
+
         // Decode token to get roles from scope
         const tokenPayload = JSON.parse(
           atob(response.data.accessToken.split('.')[1])
@@ -72,7 +76,12 @@ export function LoginForm() {
         dispatch(
           setCredentials({
             user: {
-              ...profileResult.data,
+              id: profileResult.data.id!,
+              fullName: profileResult.data.fullName || '',
+              email: profileResult.data.email || '',
+              gender: profileResult.data.gender,
+              dob: profileResult.data.dob,
+              avatar: profileResult.data.avatar,
               roles: tokenPayload.scope?.split(' ') || [],
             },
             accessToken: response.data.accessToken,
@@ -101,13 +110,13 @@ export function LoginForm() {
   };
 
   return (
-    <div className="bg-muted flex min-h-screen items-center justify-center px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-12">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-3 text-center">
-          <div className="bg-primary mx-auto flex h-16 w-16 items-center justify-center rounded-full">
-            <LogIn className="text-primary-foreground h-8 w-8" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg">
+            <LogIn className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-primary text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold text-primary">
             Welcome back
           </CardTitle>
           <CardDescription className="text-base">
@@ -117,30 +126,32 @@ export function LoginForm() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                Email Address <span className="text-destructive">*</span>
+              <Label htmlFor="email">
+                Email <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                placeholder="your.email@example.com"
-                disabled={isLoading}
-                required
-                className="h-11"
-              />
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  placeholder="your.email@example.com"
+                  disabled={isLoading}
+                  required
+                  className="h-11 pl-10"
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="flex items-center gap-2">
-                <Lock className="h-4 w-4" />
+              <Label htmlFor="password">
                 Password <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -151,20 +162,20 @@ export function LoginForm() {
                   placeholder="Enter your password"
                   disabled={isLoading}
                   required
-                  className="h-11 pr-10"
+                  className="h-11 pl-10 pr-10"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
                 >
                   {showPassword ? (
-                    <EyeOff className="text-muted-foreground h-4 w-4" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="text-muted-foreground h-4 w-4" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
@@ -182,14 +193,14 @@ export function LoginForm() {
                 />
                 <label
                   htmlFor="rememberMe"
-                  className="cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Remember me
                 </label>
               </div>
               <Link
                 href="/forgot-password"
-                className="text-primary text-sm font-medium transition-colors hover:underline"
+                className="text-sm font-medium text-primary transition-colors hover:underline"
               >
                 Forgot password?
               </Link>
@@ -211,11 +222,11 @@ export function LoginForm() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <div className="text-muted-foreground text-center text-sm">
+          <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
             <Link
               href="/register"
-              className="text-primary font-medium transition-colors hover:underline"
+              className="font-medium text-primary transition-colors hover:underline"
             >
               Sign up
             </Link>

@@ -44,13 +44,13 @@ export function ForgotPasswordForm() {
   };
 
   return (
-    <div className="bg-muted flex min-h-screen items-center justify-center px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-12">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-3 text-center">
-          <div className="bg-primary mx-auto flex h-16 w-16 items-center justify-center rounded-full">
-            <Mail className="text-primary-foreground h-8 w-8" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg">
+            <Mail className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-primary text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold text-primary">
             Forgot password?
           </CardTitle>
           <CardDescription className="text-base">
@@ -60,20 +60,22 @@ export function ForgotPasswordForm() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                Email Address <span className="text-destructive">*</span>
+              <Label htmlFor="email">
+                Email <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your.email@example.com"
-                disabled={isLoading}
-                required
-                className="h-11"
-              />
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                  disabled={isLoading}
+                  required
+                  className="h-11 pl-10"
+                />
+              </div>
             </div>
 
             <Button type="submit" className="h-11 w-full" disabled={isLoading}>
@@ -102,11 +104,11 @@ export function ForgotPasswordForm() {
             </Button>
 
             <div className="border-t pt-4 text-center">
-              <p className="text-muted-foreground text-sm">
+              <p className="text-sm text-muted-foreground">
                 Don&apos;t have an account?{' '}
                 <Link
                   href="/register"
-                  className="text-primary font-medium hover:underline"
+                  className="font-medium text-primary hover:underline"
                 >
                   Sign up
                 </Link>

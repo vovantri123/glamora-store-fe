@@ -29,6 +29,7 @@ export function RegisterForm() {
   const [formData, setFormData] = useState({
     email: '',
     fullName: '',
+    username: '',
     password: '',
     confirmPassword: '',
   });
@@ -63,13 +64,13 @@ export function RegisterForm() {
   };
 
   return (
-    <div className="bg-muted flex min-h-screen items-center justify-center px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-12">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-3 text-center">
-          <div className="bg-primary mx-auto flex h-16 w-16 items-center justify-center rounded-full">
-            <UserPlus className="text-primary-foreground h-8 w-8" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg">
+            <UserPlus className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-primary text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold text-primary">
             Create an account
           </CardTitle>
           <CardDescription className="text-base">
@@ -79,48 +80,72 @@ export function RegisterForm() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
+              <Label htmlFor="email">
                 Email <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                placeholder="example@gmail.com"
-                disabled={isLoading}
-                required
-                className="h-11"
-              />
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  placeholder="example@gmail.com"
+                  disabled={isLoading}
+                  required
+                  className="h-11 pl-10"
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="fullName" className="flex items-center gap-2">
-                <User className="h-4 w-4" />
+              <Label htmlFor="fullName">
                 Full Name <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="fullName"
-                value={formData.fullName}
-                onChange={(e) =>
-                  setFormData({ ...formData, fullName: e.target.value })
-                }
-                placeholder="Enter your full name"
-                disabled={isLoading}
-                required
-                className="h-11"
-              />
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="fullName"
+                  value={formData.fullName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
+                  placeholder="Enter your full name"
+                  disabled={isLoading}
+                  required
+                  className="h-11 pl-10"
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="flex items-center gap-2">
-                <Lock className="h-4 w-4" />
+              <Label htmlFor="username">
+                Username <span className="text-destructive">*</span>
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="username"
+                  value={formData.username}
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
+                  placeholder="Choose a username"
+                  disabled={isLoading}
+                  required
+                  className="h-11 pl-10"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">
                 Password <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -131,34 +156,31 @@ export function RegisterForm() {
                   placeholder="Create a strong password"
                   disabled={isLoading}
                   required
-                  className="h-11 pr-10"
+                  className="h-11 pl-10 pr-10"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
                 >
                   {showPassword ? (
-                    <EyeOff className="text-muted-foreground h-4 w-4" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="text-muted-foreground h-4 w-4" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label
-                htmlFor="confirmPassword"
-                className="flex items-center gap-2"
-              >
-                <Lock className="h-4 w-4" />
+              <Label htmlFor="confirmPassword">
                 Confirm Password <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -172,20 +194,20 @@ export function RegisterForm() {
                   placeholder="Confirm your password"
                   disabled={isLoading}
                   required
-                  className="h-11 pr-10"
+                  className="h-11 pl-10 pr-10"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   disabled={isLoading}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="text-muted-foreground h-4 w-4" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="text-muted-foreground h-4 w-4" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
@@ -207,11 +229,11 @@ export function RegisterForm() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <div className="text-muted-foreground text-center text-sm">
+          <div className="text-center text-sm text-muted-foreground">
             Already have an account?{' '}
             <Link
               href="/login"
-              className="text-primary font-medium transition-colors hover:underline"
+              className="font-medium text-primary transition-colors hover:underline"
             >
               Sign in
             </Link>

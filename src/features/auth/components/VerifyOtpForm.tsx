@@ -60,19 +60,19 @@ function VerifyOtpFormContent() {
   };
 
   return (
-    <div className="bg-muted flex min-h-screen items-center justify-center px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-12">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-3 text-center">
-          <div className="bg-primary mx-auto flex h-16 w-16 items-center justify-center rounded-full">
-            <Mail className="text-primary-foreground h-8 w-8" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg">
+            <Mail className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-primary text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold text-primary">
             Verify your email
           </CardTitle>
           <CardDescription className="text-base">
             We&apos;ve sent a 6-digit verification code to
             <br />
-            <span className="text-foreground font-semibold">{email}</span>
+            <span className="font-semibold text-foreground">{email}</span>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -95,32 +95,32 @@ function VerifyOtpFormContent() {
                   <InputOTPGroup className="gap-3">
                     <InputOTPSlot
                       index={0}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={1}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={2}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={3}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={4}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={5}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </InputOTPGroup>
                 </InputOTP>
               </div>
-              <p className="text-muted-foreground text-center text-xs">
+              <p className="text-center text-xs text-muted-foreground">
                 Please enter the 6-digit code sent to your email
               </p>
             </div>
@@ -155,11 +155,11 @@ function VerifyOtpFormContent() {
                 Back to Register
               </Button>
 
-              <p className="text-muted-foreground text-center text-sm">
+              <p className="text-center text-sm text-muted-foreground">
                 Didn&apos;t receive the code?{' '}
                 <button
                   type="button"
-                  className="text-primary font-medium transition-colors hover:underline"
+                  className="font-medium text-primary transition-colors hover:underline"
                   onClick={() =>
                     toast.info(
                       'Please check your spam folder or try registering again'

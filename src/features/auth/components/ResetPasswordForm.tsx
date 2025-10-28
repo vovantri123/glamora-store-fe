@@ -77,19 +77,19 @@ function ResetPasswordFormContent() {
   };
 
   return (
-    <div className="bg-muted flex min-h-screen items-center justify-center px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-12">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-3 text-center">
-          <div className="bg-primary mx-auto flex h-16 w-16 items-center justify-center rounded-full">
-            <KeyRound className="text-primary-foreground h-8 w-8" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 shadow-lg">
+            <KeyRound className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-primary text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold text-primary">
             Reset your password
           </CardTitle>
           <CardDescription className="text-base">
             Enter the code sent to
             <br />
-            <span className="text-foreground font-semibold">{email}</span>
+            <span className="font-semibold text-foreground">{email}</span>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -112,27 +112,27 @@ function ResetPasswordFormContent() {
                   <InputOTPGroup className="gap-3">
                     <InputOTPSlot
                       index={0}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={1}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={2}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={3}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={4}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <InputOTPSlot
                       index={5}
-                      className="hover:border-primary focus:border-primary focus:ring-primary/20 h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 focus:ring-2"
+                      className="h-14 w-14 rounded-xl border-2 text-xl font-bold transition-all duration-200 hover:border-primary focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   </InputOTPGroup>
                 </InputOTP>
@@ -140,11 +140,11 @@ function ResetPasswordFormContent() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="newPassword" className="flex items-center gap-2">
-                <Lock className="h-4 w-4" />
+              <Label htmlFor="newPassword">
                 New Password <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="newPassword"
                   type={showPassword ? 'text' : 'password'}
@@ -155,34 +155,31 @@ function ResetPasswordFormContent() {
                   placeholder="Enter new password"
                   disabled={isLoading}
                   required
-                  className="pr-10"
+                  className="h-11 pl-10 pr-10"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
                 >
                   {showPassword ? (
-                    <EyeOff className="text-muted-foreground h-4 w-4" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="text-muted-foreground h-4 w-4" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label
-                htmlFor="confirmPassword"
-                className="flex items-center gap-2"
-              >
-                <Lock className="h-4 w-4" />
+              <Label htmlFor="confirmPassword">
                 Confirm Password <span className="text-destructive">*</span>
               </Label>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -196,20 +193,20 @@ function ResetPasswordFormContent() {
                   placeholder="Confirm new password"
                   disabled={isLoading}
                   required
-                  className="pr-10"
+                  className="h-11 pl-10 pr-10"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   disabled={isLoading}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="text-muted-foreground h-4 w-4" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="text-muted-foreground h-4 w-4" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
