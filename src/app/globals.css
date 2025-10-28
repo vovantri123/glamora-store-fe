@@ -120,3 +120,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Fix: Ẩn icon “hiện/ẩn mật khẩu” mặc định của trình duyệt */
+input::-ms-reveal,
+input::-ms-clear,
+input::-webkit-credentials-auto-fill-button {
+  display: none !important;
+}

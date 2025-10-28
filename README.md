@@ -13,41 +13,6 @@
 - ✅ **Husky** (Git hooks)
 - ✅ **lint-staged** (Pre-commit auto-format)
 
-## 📦 Cấu trúc Project
-
-```
-fe/
-├── 📁 .husky/
-│   └── pre-commit              # Auto format on commit
-├── 📁 .vscode/
-│   ├── settings.json          # Format on save
-│   └── extensions.json        # Extension recommendations
-├── 📁 src/
-│   ├── app/
-│   │   ├── layout.tsx         # Root layout
-│   │   ├── page.tsx           # Home page
-│   │   └── globals.css        # Global styles
-│   ├── components/
-│   │   ├── Button.tsx         # ✨ Example component
-│   │   └── TestComponent.tsx  # Test component
-│   └── lib/
-│       ├── api.ts             # ✨ API utilities
-│       ├── constants.ts       # ✨ App constants
-│       └── utils.ts           # ✨ Helper functions
-├── 📄 .editorconfig            # Editor config
-├── 📄 .env.example             # Environment template
-├── 📄 .env.local               # Local environment
-├── 📄 .gitattributes           # Git attributes
-├── 📄 .prettierrc              # Prettier config
-├── 📄 .prettierignore          # Prettier ignore
-├── 📄 eslint.config.mjs        # ESLint config
-├── 📄 tsconfig.json            # TypeScript config
-├── 📄 package.json             # Dependencies
-├── 📄 README.md                # Project README
-├── 📄 SETUP_GUIDE.md           # 📚 Chi tiết setup
-└── 📄 COMMIT_CONVENTION.md     # 📝 Commit convention
-```
-
 ## 🚀 Commands
 
 | Command                | Mô tả                                       |
@@ -122,24 +87,6 @@ Mỗi khi commit, code sẽ tự động được:
 - ✅ `SETUP_GUIDE.md` - Detailed setup guide
 - ✅ `COMMIT_CONVENTION.md` - Commit guidelines
 - ✅ `PROJECT_SUMMARY.md` - This file!
-
-### Example Code
-
-- ✅ `src/components/Button.tsx` - Reusable button
-- ✅ `src/lib/api.ts` - API utilities
-- ✅ `src/lib/constants.ts` - App constants
-- ✅ `src/lib/utils.ts` - Helper functions
-
-## 🧪 Đã Test
-
-- ✅ `npm install` - Success
-- ✅ `npm run dev` - Dev server works
-- ✅ `npm run build` - Build success
-- ✅ `npm run lint` - No errors
-- ✅ `npm run format` - Formatting works
-- ✅ Husky hooks installed
-- ✅ TypeScript compilation
-- ✅ Tailwind CSS working
 
 ## 🎨 Code Style
 
