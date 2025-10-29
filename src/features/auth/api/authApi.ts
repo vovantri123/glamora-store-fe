@@ -9,6 +9,8 @@ import type {
   OtpVerifyRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
+  UpdateProfileRequest,
+  UpdatePasswordRequest,
 } from '../types/auth.types';
 
 export const authApi = baseApi.injectEndpoints({
@@ -70,6 +72,26 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
+
+    updateProfile: builder.mutation<
+      ApiResponse<UserResponse>,
+      UpdateProfileRequest
+    >({
+      query: (data: UpdateProfileRequest) => ({
+        url: '/user/profile',
+        method: 'PUT',
+        data,
+      }),
+      invalidatesTags: ['User'],
+    }),
+
+    updatePassword: builder.mutation<ApiResponse<void>, UpdatePasswordRequest>({
+      query: (data: UpdatePasswordRequest) => ({
+        url: '/user/profile/password',
+        method: 'PUT',
+        data,
+      }),
+    }),
   }),
 });
 
@@ -82,4 +104,6 @@ export const {
   useVerifyRegisterOtpMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useUpdateProfileMutation,
+  useUpdatePasswordMutation,
 } = authApi;

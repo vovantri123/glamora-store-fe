@@ -34,6 +34,18 @@ export interface ResetPasswordRequest {
   newPassword: string;
 }
 
+export interface UpdateProfileRequest {
+  fullName?: string;
+  gender?: string;
+  dob?: string;
+  avatar?: string;
+}
+
+export interface UpdatePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+}
+
 // User Types
 export interface User {
   id: number;

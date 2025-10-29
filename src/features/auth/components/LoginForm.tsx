@@ -26,8 +26,6 @@ import {
   setLoading,
   setError,
 } from '@/features/auth/store/authSlice';
-import type { ApiResponse } from '@/types/api.type';
-import type { LoginResponse } from '@/features/auth/types/auth.types';
 import { useGuestGuard } from '@/features/auth/hooks/useAuthGuard';
 
 export function LoginForm() {
@@ -51,13 +49,12 @@ export function LoginForm() {
       dispatch(setError(null));
 
       const result = await login(formData).unwrap();
-      const response = result as ApiResponse<LoginResponse>;
 
-      if (response.data?.accessToken) {
+      if (result.data?.accessToken) {
         // Store token temporarily to make authenticated request
         if (typeof window !== 'undefined') {
           const storage = rememberMe ? localStorage : sessionStorage;
-          storage.setItem('accessToken', response.data.accessToken);
+          storage.setItem('accessToken', result.data.accessToken);
         }
 
         // Fetch user profile with the token
@@ -71,7 +68,7 @@ export function LoginForm() {
 
         // Decode token to get roles from scope
         const tokenPayload = JSON.parse(
-          atob(response.data.accessToken.split('.')[1])
+          atob(result.data.accessToken.split('.')[1])
         );
 
         // Store credentials with user profile data
@@ -86,12 +83,12 @@ export function LoginForm() {
               avatar: profileResult.data.avatar,
               roles: tokenPayload.scope?.split(' ') || [],
             },
-            accessToken: response.data.accessToken,
+            accessToken: result.data.accessToken,
             rememberMe,
           })
         );
 
-        toast.success(response.message || 'Login successful!');
+        toast.success(result.message || 'Login successful!');
         router.push('/dashboard');
       }
     } catch (error: unknown) {
