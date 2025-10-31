@@ -89,7 +89,7 @@ export function LoginForm() {
         );
 
         toast.success(result.message || 'Login successful!');
-        router.push('/dashboard');
+        router.push('/');
       }
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'data' in error) {

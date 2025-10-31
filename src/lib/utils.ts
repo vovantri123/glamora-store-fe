@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { ProductVariant } from '@/features/product/api/productApi';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -35,4 +36,16 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
     }
     timeout = setTimeout(later, wait);
   };
+}
+
+export function formatPrice(price: number): string {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(price);
+}
+
+export function getLowestPrice(variants: ProductVariant[]): number {
+  if (!variants || variants.length === 0) return 0;
+  return Math.min(...variants.map((v) => v.price));
 }
