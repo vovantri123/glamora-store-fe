@@ -7,6 +7,9 @@ import { Minus, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { toggleItemSelection } from '../store/cartSlice';
 import {
   useUpdateCartItemMutation,
   useRemoveCartItemMutation,
@@ -17,11 +20,20 @@ import type { CartItem as CartItemType } from '../types';
 
 interface CartItemProps {
   item: CartItemType;
+  showCheckbox?: boolean;
 }
 
-export default function CartItem({ item }: CartItemProps) {
+export default function CartItem({ item, showCheckbox = true }: CartItemProps) {
+  const dispatch = useAppDispatch();
+  const selectedItemIds = useAppSelector((state) => state.cart.selectedItemIds);
+  const isSelected = selectedItemIds.includes(item.id);
+
   const [updateCartItem, { isLoading: updating }] = useUpdateCartItemMutation();
   const [removeCartItem, { isLoading: removing }] = useRemoveCartItemMutation();
+
+  const handleToggleSelection = () => {
+    dispatch(toggleItemSelection(item.id));
+  };
 
   const handleUpdateQuantity = async (newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -54,12 +66,29 @@ export default function CartItem({ item }: CartItemProps) {
   const isProcessing = updating || removing;
 
   return (
-    <Card className="p-4">
+    <Card
+      className={`cursor-pointer p-4 transition-all ${
+        isSelected ? 'border-2 border-orange-400 bg-orange-50/30' : ''
+      }`}
+      onClick={handleToggleSelection}
+    >
       <div className="flex gap-4">
+        {/* Checkbox for selection */}
+        {showCheckbox && (
+          <div className="flex items-start pt-2">
+            <Checkbox
+              checked={isSelected}
+              disabled={isProcessing}
+              className="h-5 w-5 data-[state=checked]:border-orange-600 data-[state=checked]:bg-orange-600"
+            />
+          </div>
+        )}
+
         {/* Product Image */}
         <Link
           href={`/products/${item.variant.product.id}`}
           className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100"
+          onClick={(e) => e.stopPropagation()}
         >
           <Image
             src={item.variant.imageUrl || '/placeholder.png'}
@@ -76,6 +105,7 @@ export default function CartItem({ item }: CartItemProps) {
             <Link
               href={`/products/${item.variant.product.id}`}
               className="font-semibold hover:text-orange-600"
+              onClick={(e) => e.stopPropagation()}
             >
               {item.variant.product.name}
             </Link>
@@ -115,7 +145,10 @@ export default function CartItem({ item }: CartItemProps) {
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 rounded-r-none"
-                  onClick={() => handleUpdateQuantity(item.quantity - 1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUpdateQuantity(item.quantity - 1);
+                  }}
                   disabled={item.quantity <= 1 || isProcessing}
                 >
                   <Minus className="h-3 w-3" />
@@ -127,7 +160,10 @@ export default function CartItem({ item }: CartItemProps) {
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 rounded-l-none"
-                  onClick={() => handleUpdateQuantity(item.quantity + 1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUpdateQuantity(item.quantity + 1);
+                  }}
                   disabled={item.quantity >= item.variant.stock || isProcessing}
                 >
                   <Plus className="h-3 w-3" />
@@ -138,7 +174,10 @@ export default function CartItem({ item }: CartItemProps) {
                 size="icon"
                 variant="ghost"
                 className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700"
-                onClick={handleRemove}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemove();
+                }}
                 disabled={isProcessing}
               >
                 <Trash2 className="h-4 w-4" />

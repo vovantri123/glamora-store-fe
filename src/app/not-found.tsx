@@ -1,11 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, ShoppingBag } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Home, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 export default function NotFound() {
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push('/');
+    }
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 via-white to-red-50 px-4">
       <Card className="w-full max-w-2xl border-none shadow-2xl">
@@ -30,6 +41,15 @@ export default function NotFound() {
 
           {/* Actions */}
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Button
+              onClick={handleGoBack}
+              size="lg"
+              variant="outline"
+              className="w-full sm:w-auto"
+            >
+              <ArrowLeft className="mr-2 h-5 w-5" />
+              Quay lại
+            </Button>
             <Link href="/">
               <Button
                 size="lg"
@@ -37,12 +57,6 @@ export default function NotFound() {
               >
                 <Home className="mr-2 h-5 w-5" />
                 Về trang chủ
-              </Button>
-            </Link>
-            <Link href="/products">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                <ShoppingBag className="mr-2 h-5 w-5" />
-                Xem sản phẩm
               </Button>
             </Link>
           </div>

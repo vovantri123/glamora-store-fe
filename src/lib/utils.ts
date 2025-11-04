@@ -38,11 +38,15 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   };
 }
 
-export function formatPrice(price: number): string {
+export function formatPrice(price: number | undefined | null): string {
+  const numPrice = Number(price);
+  if (isNaN(numPrice) || numPrice === null || numPrice === undefined) {
+    return '0 ₫';
+  }
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
-  }).format(price);
+  }).format(numPrice);
 }
 
 export function getLowestPrice(variants: ProductVariant[]): number {

@@ -10,6 +10,7 @@ import { useGetProfileQuery } from '@/features/auth/api/authApi';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { logout } from '@/features/auth/store/authSlice';
 import { resetApiState } from '@/lib/api/baseApi';
+import { DashboardHeader } from './DashboardHeader';
 import { toast } from 'sonner';
 import {
   LayoutDashboard,
@@ -21,18 +22,34 @@ import {
   Menu,
   X,
   Store,
+  Users,
+  Package,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Profile', href: '/dashboard/profile', icon: User },
-  { name: 'Orders', href: '/dashboard/orders', icon: ShoppingBag },
-  { name: 'Wishlist', href: '/dashboard/wishlist', icon: Heart },
-  { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+const userNavigation = [
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }, // ????
+  { name: 'Profile', href: '/admin/profile', icon: User },
+  { name: 'Orders', href: '/admin/orders', icon: ShoppingBag },
+  { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
+const adminNavigation = [
+  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Orders', href: '/admin/orders', icon: ShoppingBag },
+  { name: 'Products', href: '/admin/products', icon: Package },
+  { name: 'Users', href: '/admin/users', icon: Users },
+];
+
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+  isAdmin?: boolean;
+}
+
+export function DashboardLayout({
+  children,
+  isAdmin = false,
+}: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -47,6 +64,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   });
 
   const user = profileData?.data;
+
+  const navigation = isAdmin ? adminNavigation : userNavigation;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -159,42 +178,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="lg:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white/80 px-6 backdrop-blur-sm dark:bg-slate-950/80">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-
-          <div className="flex-1">
-            <h1 className="text-lg font-semibold">
-              {navigation.find((item) => item.href === pathname)?.name ||
-                'Dashboard'}
-            </h1>
-          </div>
-
-          {/* Desktop User Menu */}
-          <div className="hidden items-center gap-3 lg:flex">
-            <Avatar className="h-9 w-9 ring-2 ring-primary/20">
-              <AvatarImage
-                src={user?.avatar || undefined}
-                alt={user?.fullName}
-              />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-sm text-white">
-                {user?.fullName?.charAt(0)?.toUpperCase() || 'U'}
-              </AvatarFallback>
-            </Avatar>
-            <div className="hidden xl:block">
-              <p className="text-sm font-medium">{user?.fullName || 'User'}</p>
-              <p className="text-xs text-muted-foreground">
-                {user?.email || ''}
-              </p>
-            </div>
-          </div>
-        </header>
+        <DashboardHeader
+          user={user}
+          navigationItems={navigation}
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
         {/* Page Content */}
         <main className="p-6">{children}</main>

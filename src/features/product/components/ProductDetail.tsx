@@ -165,7 +165,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Product Details Section */}
       <ProductReviews
         productId={product.id}
+        productName={product.name}
         description={product.description}
+        selectedVariantId={selectedVariantId}
       />
     </div>
   );

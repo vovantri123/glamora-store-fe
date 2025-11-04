@@ -1,7 +1,10 @@
 'use client';
 
-import { ProfileForm } from '@/features/auth/components/ProfileForm';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from 'react';
+import { useUpdatePasswordMutation } from '../api/authApi';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
@@ -9,44 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useState } from 'react';
-import { useUpdatePasswordMutation } from '@/features/auth/api/authApi';
-import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
 import { Lock } from 'lucide-react';
 
-export default function ProfilePage() {
-  return (
-    <div className="container mx-auto px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">My Account</h1>
-        <p className="mt-2 text-muted-foreground">
-          Manage your personal information and account security
-        </p>
-      </div>
-
-      <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="profile" className="mt-6">
-          <ProfileForm />
-        </TabsContent>
-
-        <TabsContent value="security" className="mt-6">
-          <PasswordChangeForm />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-}
-
-function PasswordChangeForm() {
+export function PasswordChangeForm() {
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
   const [formData, setFormData] = useState({
     oldPassword: '',

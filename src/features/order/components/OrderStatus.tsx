@@ -21,12 +21,7 @@ const STATUS_CONFIG: Record<
   CONFIRMED: {
     label: 'Confirmed',
     color: 'bg-blue-100 text-blue-800 border-blue-200',
-    icon: '✓',
-  },
-  PROCESSING: {
-    label: 'Processing',
-    color: 'bg-cyan-100 text-cyan-800 border-cyan-200',
-    icon: '⚙️',
+    icon: '💳',
   },
   SHIPPING: {
     label: 'Shipping',
@@ -38,7 +33,7 @@ const STATUS_CONFIG: Record<
     color: 'bg-green-100 text-green-800 border-green-200',
     icon: '✅',
   },
-  CANCELLED: {
+  CANCELED: {
     label: 'Cancelled',
     color: 'bg-red-100 text-red-800 border-red-200',
     icon: '❌',

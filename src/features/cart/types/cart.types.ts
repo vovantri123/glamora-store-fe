@@ -47,4 +47,5 @@ export interface CartState {
   totalItems: number;
   totalAmount: number;
   isOpen: boolean; // For cart drawer/modal
+  selectedItemIds: number[]; // IDs of selected cart items for checkout
 }

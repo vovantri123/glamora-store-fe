@@ -6,6 +6,7 @@ const initialState: CartState = {
   totalItems: 0,
   totalAmount: 0,
   isOpen: false,
+  selectedItemIds: [],
 };
 
 /**
@@ -62,6 +63,38 @@ const cartSlice = createSlice({
       state.items = [];
       state.totalItems = 0;
       state.totalAmount = 0;
+      state.selectedItemIds = [];
+    },
+    // Selection management
+    toggleItemSelection: (state, action: PayloadAction<number>) => {
+      const itemId = action.payload;
+      const index = state.selectedItemIds.indexOf(itemId);
+      if (index >= 0) {
+        state.selectedItemIds.splice(index, 1);
+      } else {
+        state.selectedItemIds.push(itemId);
+      }
+    },
+    selectAllItems: (state) => {
+      state.selectedItemIds = state.items.map((item) => item.id);
+    },
+    deselectAllItems: (state) => {
+      state.selectedItemIds = [];
+    },
+    // Remove selected items from cart (after successful checkout)
+    removeSelectedItems: (state) => {
+      const selectedSet = new Set(state.selectedItemIds);
+      state.items = state.items.filter((item) => !selectedSet.has(item.id));
+      state.selectedItemIds = [];
+      // Recalculate totals
+      state.totalItems = state.items.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+      state.totalAmount = state.items.reduce(
+        (sum, item) => sum + item.subtotal,
+        0
+      );
     },
     // Optimistic update - add item
     optimisticAddItem: (state, action: PayloadAction<CartItem>) => {
@@ -113,6 +146,10 @@ export const {
   closeCart,
   toggleCart,
   clearCart,
+  toggleItemSelection,
+  selectAllItems,
+  deselectAllItems,
+  removeSelectedItems,
   optimisticAddItem,
   optimisticUpdateItem,
   optimisticRemoveItem,

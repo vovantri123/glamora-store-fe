@@ -171,20 +171,6 @@ export default function UserLayout({
                       <Package className="mr-2 h-4 w-4" />
                       Order History
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => router.push('/orders/track')}
-                    >
-                      <MapPin className="mr-2 h-4 w-4" />
-                      Track Order
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => router.push('/wishlist')}
-                    >
-                      <Heart className="mr-2 h-4 w-4" />
-                      Wishlist
-                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={handleLogout}

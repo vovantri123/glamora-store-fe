@@ -11,43 +11,71 @@ export interface PageResponse<T> {
 
 export interface OrderItem {
   id: number;
-  productVariantId: number;
+  variantId?: number;
   productName: string;
-  variantAttributes: string;
-  imageUrl?: string;
+  variantName?: string;
+  variantAttributes?: string;
+  productImageUrl?: string;
   quantity: number;
-  unitPrice: number;
+  price?: number;
+  unitPrice?: number;
   totalPrice: number;
 }
 
 export interface Order {
   id: number;
   orderCode: string;
-  status:
-    | 'PENDING'
-    | 'CONFIRMED'
-    | 'PROCESSING'
-    | 'SHIPPING'
-    | 'COMPLETED'
-    | 'CANCELLED';
-  totalAmount: number;
+  status: 'PENDING' | 'CONFIRMED' | 'SHIPPING' | 'COMPLETED' | 'CANCELED';
+  paymentStatus?: 'PENDING' | 'SUCCESS' | 'FAILED';
+  paymentMethodId?: number;
+  paymentMethodName?: string; // COD, VNPay, etc.
+  subtotal?: number;
+  discountAmount?: number;
+  distance?: number;
   shippingFee: number;
-  discountAmount: number;
-  finalAmount: number;
-  shippingAddress: string;
-  recipientName: string;
-  recipientPhone: string;
+  totalAmount: number;
+  finalAmount?: number;
+  shippingAddress?: string;
+  shippingAddressDetail?: string;
+  recipientName?: string;
+  recipientPhone?: string;
   note?: string;
-  items: OrderItem[];
+  canceledReason?: string | null;
+  items?: OrderItem[];
+  orderItems?: OrderItem[];
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string | null;
+  userId?: number;
+  userEmail?: string;
+  userFullName?: string;
+  addressId?: number;
 }
 
 export interface OrdersParams {
   page?: number;
   size?: number;
-  sort?: string;
+  sortBy?: string;
+  sortDir?: string;
   status?: string;
+  orderCode?: string;
+}
+
+export interface OrderItemRequest {
+  variantId: number;
+  quantity: number;
+}
+
+export interface CreateOrderRequest {
+  addressId: number;
+  paymentMethodId: number; // Payment method chosen by user (1=COD, 2=VNPay)
+  note?: string;
+  items: OrderItemRequest[];
+  voucherId?: number; // Voucher ID if user applied voucher
+  discountAmount?: number; // Calculated discount amount from voucher
+}
+
+export interface CancelOrderRequest {
+  canceledReason?: string;
 }
 
 export const orderApi = baseApi.injectEndpoints({
@@ -63,9 +91,31 @@ export const orderApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/user/orders/${id}` }),
       providesTags: ['Order'],
     }),
-    getOrderByCode: builder.query<ApiResponse<Order>, string>({
-      query: (code) => ({ url: `/user/orders/code/${code}` }),
-      providesTags: ['Order'],
+    createOrder: builder.mutation<ApiResponse<Order>, CreateOrderRequest>({
+      query: (data) => ({
+        url: '/user/orders',
+        method: 'POST',
+        data,
+      }),
+      invalidatesTags: ['Order', 'Cart'],
+    }),
+    confirmOrderReceived: builder.mutation<ApiResponse<Order>, number>({
+      query: (orderId) => ({
+        url: `/user/orders/${orderId}/confirm-received`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['Order'],
+    }),
+    cancelOrder: builder.mutation<
+      ApiResponse<Order>,
+      { orderId: number; data: CancelOrderRequest }
+    >({
+      query: ({ orderId, data }) => ({
+        url: `/user/orders/${orderId}/cancel`,
+        method: 'PUT',
+        data,
+      }),
+      invalidatesTags: ['Order'],
     }),
   }),
   overrideExisting: false,
@@ -74,5 +124,7 @@ export const orderApi = baseApi.injectEndpoints({
 export const {
   useGetMyOrdersQuery,
   useGetOrderByIdQuery,
-  useGetOrderByCodeQuery,
+  useCreateOrderMutation,
+  useConfirmOrderReceivedMutation,
+  useCancelOrderMutation,
 } = orderApi;
