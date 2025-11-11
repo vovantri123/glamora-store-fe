@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { useGetProfileQuery } from '@/features/auth/api/authApi';
+import {
+  useGetProfileQuery,
+  useLogoutMutation,
+} from '@/features/auth/api/authApi';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { logout } from '@/features/auth/store/authSlice';
 import { resetApiState } from '@/lib/api/baseApi';
@@ -54,6 +56,7 @@ export function DashboardLayout({
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [logoutApi] = useLogoutMutation();
 
   // Get auth state to check if user is authenticated
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
@@ -67,11 +70,28 @@ export function DashboardLayout({
 
   const navigation = isAdmin ? adminNavigation : userNavigation;
 
-  const handleLogout = () => {
-    dispatch(logout());
-    dispatch(resetApiState());
-    toast.success('Logged out successfully');
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      // Get refresh token
+      const refreshToken =
+        localStorage.getItem('refreshToken') ||
+        sessionStorage.getItem('refreshToken');
+
+      if (refreshToken) {
+        // Call logout API to revoke refresh token
+        await logoutApi({ refreshToken }).unwrap();
+      }
+    } catch (error) {
+      console.error('Logout API error:', error);
+      // Continue logout even if API fails
+    } finally {
+      // ✅ Reset API state TRƯỚC để hủy các request pending
+      dispatch(resetApiState());
+      // Clear local state
+      dispatch(logout());
+      toast.success('Logged out successfully');
+      router.push('/login');
+    }
   };
 
   return (

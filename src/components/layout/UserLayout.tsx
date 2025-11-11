@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { resetApiState } from '@/lib/api/baseApi';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +32,10 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { logout } from '@/features/auth/store/authSlice';
 import { useGetRootCategoriesQuery } from '@/features/category/api/categoryApi';
 import { useGetCartQuery } from '@/features/cart/api/cartApi';
-import { useGetProfileQuery } from '@/features/auth/api/authApi';
+import {
+  useGetProfileQuery,
+  useLogoutMutation,
+} from '@/features/auth/api/authApi';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function UserLayout({
@@ -41,6 +46,7 @@ export default function UserLayout({
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [logoutApi] = useLogoutMutation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
@@ -59,9 +65,28 @@ export default function UserLayout({
   const cartItemsCount = cartData?.data?.totalItems || 0;
   const profile = profileData?.data;
 
-  const handleLogout = () => {
-    dispatch(logout());
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      // Get refresh token
+      const refreshToken =
+        localStorage.getItem('refreshToken') ||
+        sessionStorage.getItem('refreshToken');
+
+      if (refreshToken) {
+        // Call logout API to revoke refresh token
+        await logoutApi({ refreshToken }).unwrap();
+      }
+    } catch (error) {
+      console.error('Logout API error:', error);
+      // Continue logout even if API fails
+    } finally {
+      // ✅ Reset API state TRƯỚC để hủy các request pending
+      dispatch(resetApiState());
+      // Clear local state
+      dispatch(logout());
+      router.push('/login');
+      toast.success('Logged out successfully');
+    }
   };
 
   const handleSearch = (e: React.FormEvent) => {

@@ -3,6 +3,8 @@ import type { ApiResponse } from '@/types/api.type';
 import type {
   LoginRequest,
   LoginResponse,
+  RefreshTokenRequest,
+  LogoutRequest,
   IntrospectRequest,
   RegisterRequest,
   UserResponse,
@@ -22,6 +24,26 @@ export const authApi = baseApi.injectEndpoints({
         data: credentials,
       }),
       invalidatesTags: ['Auth'],
+    }),
+
+    refreshToken: builder.mutation<
+      ApiResponse<LoginResponse>,
+      RefreshTokenRequest
+    >({
+      query: (request: RefreshTokenRequest) => ({
+        url: '/public/auth/refresh',
+        method: 'POST',
+        data: request,
+      }),
+    }),
+
+    logout: builder.mutation<ApiResponse<void>, LogoutRequest>({
+      query: (request: LogoutRequest) => ({
+        url: '/public/auth/logout',
+        method: 'POST',
+        data: request,
+      }),
+      invalidatesTags: ['Auth', 'User'],
     }),
 
     getProfile: builder.query<ApiResponse<UserResponse>, void>({
@@ -97,6 +119,8 @@ export const authApi = baseApi.injectEndpoints({
 
 export const {
   useLoginMutation,
+  useRefreshTokenMutation,
+  useLogoutMutation,
   useGetProfileQuery,
   useLazyGetProfileQuery,
   useIntrospectMutation,

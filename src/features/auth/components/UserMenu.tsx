@@ -13,6 +13,7 @@ import {
 import { User, Settings, LogOut } from 'lucide-react';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { logout } from '../store/authSlice';
+import { useLogoutMutation } from '../api/authApi';
 import { resetApiState } from '@/lib/api/baseApi';
 import { toast } from 'sonner';
 
@@ -27,12 +28,30 @@ interface UserMenuProps {
 export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [logoutApi] = useLogoutMutation();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    dispatch(resetApiState());
-    toast.success('Logged out successfully');
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      // Get refresh token
+      const refreshToken =
+        localStorage.getItem('refreshToken') ||
+        sessionStorage.getItem('refreshToken');
+
+      if (refreshToken) {
+        // Call logout API to revoke refresh token
+        await logoutApi({ refreshToken }).unwrap();
+      }
+    } catch (error) {
+      console.error('Logout API error:', error);
+      // Continue logout even if API fails
+    } finally {
+      // ✅ Reset API state TRƯỚC để hủy các request pending
+      dispatch(resetApiState());
+      // Clear local state
+      dispatch(logout());
+      toast.success('Logged out successfully');
+      router.push('/login');
+    }
   };
 
   return (

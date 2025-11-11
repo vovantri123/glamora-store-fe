@@ -1,59 +1,42 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { FileX, ArrowLeft, Home } from 'lucide-react';
+import { Shield, ArrowLeft, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-// Trong Next.js (Từ phiên bản 13 với App Router), file not-found.tsx
-// được đặt trong thư mục app/ sẽ hoạt động như một trang 404 mặc định
-//  khi người dùng truy cập vào một route không tồn tại.
-export default function NotFound() {
-  const router = useRouter();
-
-  const handleGoBack = () => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push('/');
-    }
-  };
-
+export default function Forbidden() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-red-50 via-white to-orange-50 px-4">
       <Card className="w-full max-w-2xl border-none shadow-2xl">
         <CardContent className="p-8 text-center md:p-12">
-          {/* 404 Icon */}
+          {/* 403 Icon */}
           <div className="mb-8">
             <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-red-100">
-              <FileX className="h-12 w-12 text-red-600" />
+              <Shield className="h-12 w-12 text-red-600" />
             </div>
             <h1 className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-6xl font-bold text-transparent">
-              404
+              403
             </h1>
           </div>
 
           {/* Error Message */}
           <div className="mb-8 space-y-4">
-            <h2 className="text-3xl font-bold text-gray-900">Page Not Found</h2>
+            <h2 className="text-3xl font-bold text-gray-900">Access Denied</h2>
             <p className="text-lg text-gray-600">
-              The page you&apos;re looking for doesn&apos;t exist. It might have
-              been moved, deleted, or you entered the wrong URL.
+              You don&apos;t have permission to access this resource. Please
+              contact the administrator if you believe this is an error.
             </p>
           </div>
 
           {/* Actions */}
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button
-              onClick={handleGoBack}
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto"
-            >
-              <ArrowLeft className="mr-2 h-5 w-5" />
-              Go Back
-            </Button>
+            {/* <Link href="/products">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                <ArrowLeft className="mr-2 h-5 w-5" />
+                Go to Shop
+              </Button>
+            </Link> */}
             <Link href="/">
               <Button
                 size="lg"

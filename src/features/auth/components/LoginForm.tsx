@@ -50,11 +50,12 @@ export function LoginForm() {
 
       const result = await login(formData).unwrap();
 
-      if (result.data?.accessToken) {
-        // Store token temporarily to make authenticated request
+      if (result.data?.accessToken && result.data?.refreshToken) {
+        // Store tokens temporarily to make authenticated request
         if (typeof window !== 'undefined') {
           const storage = rememberMe ? localStorage : sessionStorage;
           storage.setItem('accessToken', result.data.accessToken);
+          storage.setItem('refreshToken', result.data.refreshToken);
         }
 
         // Fetch user profile with the token
@@ -84,6 +85,7 @@ export function LoginForm() {
               roles: tokenPayload.scope?.split(' ') || [],
             },
             accessToken: result.data.accessToken,
+            refreshToken: result.data.refreshToken,
             rememberMe,
           })
         );

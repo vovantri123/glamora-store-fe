@@ -40,28 +40,38 @@ const authSlice = createSlice({
       action: PayloadAction<{
         user: User;
         accessToken: string;
+        refreshToken: string;
         rememberMe?: boolean;
       }>
     ) => {
-      const { user, accessToken, rememberMe = false } = action.payload;
+      const {
+        user,
+        accessToken,
+        refreshToken,
+        rememberMe = false,
+      } = action.payload;
       state.user = user;
       state.accessToken = accessToken;
       state.isAuthenticated = true;
       state.error = null;
 
-      // Store token and user info according to "Remember me"
+      // Store tokens and user info according to "Remember me"
       if (typeof window !== 'undefined') {
         if (rememberMe) {
           localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', refreshToken);
           localStorage.setItem('user', JSON.stringify(user));
           // Ensure removal from sessionStorage
           sessionStorage.removeItem('accessToken');
+          sessionStorage.removeItem('refreshToken');
           sessionStorage.removeItem('user');
         } else {
           sessionStorage.setItem('accessToken', accessToken);
+          sessionStorage.setItem('refreshToken', refreshToken);
           sessionStorage.setItem('user', JSON.stringify(user));
           // Ensure removal from localStorage
           localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
           localStorage.removeItem('user');
         }
       }
@@ -87,8 +97,10 @@ const authSlice = createSlice({
       // Clear storage
       if (typeof window !== 'undefined') {
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
         sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('refreshToken');
         sessionStorage.removeItem('user');
       }
     },
@@ -116,6 +128,26 @@ const authSlice = createSlice({
         }
       }
     },
+
+    updateTokens: (
+      state,
+      action: PayloadAction<{
+        accessToken: string;
+        refreshToken: string;
+      }>
+    ) => {
+      const { accessToken, refreshToken } = action.payload;
+      state.accessToken = accessToken;
+
+      // Update storage
+      if (typeof window !== 'undefined') {
+        const storage = localStorage.getItem('accessToken')
+          ? localStorage
+          : sessionStorage;
+        storage.setItem('accessToken', accessToken);
+        storage.setItem('refreshToken', refreshToken);
+      }
+    },
   },
 });
 
@@ -127,6 +159,7 @@ export const {
   setError,
   clearError,
   updateAccessToken,
+  updateTokens,
 } = authSlice.actions;
 
 export default authSlice.reducer;
