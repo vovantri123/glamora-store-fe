@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/card';
 
 import { useRegisterMutation } from '@/features/auth/api/authApi';
-import { useGuestGuard } from '@/features/auth/hooks/useAuthGuard';
+import { useGuestGuard } from '@/hooks/useAuthGuard';
 
 export function RegisterForm() {
   useGuestGuard(); // Redirect to dashboard if already authenticated

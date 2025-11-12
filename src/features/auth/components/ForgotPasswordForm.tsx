@@ -16,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useGuestGuard } from '@/features/auth/hooks';
+import { useGuestGuard } from '@/hooks';
 
 import { useForgotPasswordMutation } from '@/features/auth/api/authApi';
 

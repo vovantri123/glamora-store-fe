@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatPrice, getLowestPrice } from '@/lib/utils';
 import type { ProductVariant } from '@/features/product/api/productApi';
+import { useImageWithFallback } from '@/hooks';
 
 interface ProductCardProps {
   id: number;
@@ -26,8 +27,10 @@ export default function ProductCard({
   averageRating,
   totalReviews,
 }: ProductCardProps) {
+  const { src: imageSrc, handleError } = useImageWithFallback(
+    images?.[0]?.imageUrl
+  );
   const lowestPrice = getLowestPrice(variants);
-  const mainImage = images?.[0]?.imageUrl || '/placeholder.png';
   const hasDiscount = variants[0]?.compareAtPrice;
   const hasRating = averageRating && averageRating > 0;
 
@@ -36,11 +39,12 @@ export default function ProductCard({
       <Link href={`/products/${id}`}>
         <div className="relative aspect-square overflow-hidden bg-gray-100">
           <Image
-            src={mainImage}
+            src={imageSrc}
             alt={name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover transition-transform duration-300 group-hover:scale-110"
+            onError={handleError}
           />
           {hasDiscount && (
             <Badge className="absolute left-2 top-2 bg-red-500">Sale</Badge>

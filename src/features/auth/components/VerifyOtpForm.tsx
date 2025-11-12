@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/card';
 
 import { useVerifyRegisterOtpMutation } from '@/features/auth/api/authApi';
-import { useGuestGuard } from '@/features/auth/hooks';
+import { useGuestGuard } from '@/hooks';
 
 function VerifyOtpFormContent() {
   useGuestGuard();

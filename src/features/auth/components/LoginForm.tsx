@@ -26,7 +26,7 @@ import {
   setLoading,
   setError,
 } from '@/features/auth/store/authSlice';
-import { useGuestGuard } from '@/features/auth/hooks/useAuthGuard';
+import { useGuestGuard } from '@/hooks/useAuthGuard';
 
 export function LoginForm() {
   useGuestGuard(); // Redirect to dashboard if already authenticated

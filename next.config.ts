@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
         hostname: 'i.pravatar.cc',
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

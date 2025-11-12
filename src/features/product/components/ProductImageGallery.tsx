@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useImageWithFallback } from '@/hooks';
 
 interface ProductImage {
   id: number;
@@ -24,6 +25,28 @@ export default function ProductImageGallery({
 }: ProductImageGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+
+  // Handle main image fallback
+  const { src: mainImageSrc, handleError: handleMainImageError } =
+    useImageWithFallback(images?.[selectedImage]?.imageUrl);
+
+  const handleThumbnailError = (imageId: number) => {
+    setFailedImages((prev) => {
+      const newSet = new Set(prev); // Copy Set cũ
+      newSet.add(imageId); // Thêm vào copy
+      return newSet; // Return object mới
+    });
+  };
+  /*
+    prev ở đây không phải bản copy, mà là reference trỏ đến object trong state cũ.
+
+    Khi bạn gọi prev.add(imageId), bạn thay đổi nội dung của chính object đó.
+
+    → React sẽ không biết rằng state đã đổi, vì nó so sánh reference (tham chiếu) chứ không so sánh nội dung bên trong.
+    → oldState === newState
+    → React nghĩ state không đổi → Không re-render UI
+  */
 
   const nextImage = () => {
     if (images.length > 0) {
@@ -68,12 +91,13 @@ export default function ProductImageGallery({
       {/* Main Image */}
       <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100 shadow-md">
         <Image
-          src={images[selectedImage].imageUrl}
+          src={mainImageSrc}
           alt={images[selectedImage].altText || productName}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover"
           priority
+          onError={handleMainImageError}
         />
 
         {/* Navigation Buttons */}
@@ -126,11 +150,16 @@ export default function ProductImageGallery({
                     }`}
                   >
                     <Image
-                      src={img.imageUrl}
+                      src={
+                        failedImages.has(img.id)
+                          ? '/placeholder.png'
+                          : img.imageUrl
+                      }
                       alt={img.altText || `${productName} ${actualIndex + 1}`}
                       fill
                       sizes="(max-width: 768px) 25vw, 12vw"
                       className="object-cover transition-transform group-hover:scale-110"
+                      onError={() => handleThumbnailError(img.id)}
                     />
                   </button>
                 );
