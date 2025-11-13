@@ -9,6 +9,7 @@ import { useGetProductsQuery } from '@/features/product/api/productApi';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
   // Fetch featured products (newest 8 products)
@@ -140,10 +141,10 @@ export default function HomePage() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {[...Array(8)].map((_, i) => (
                 <Card key={i} className="overflow-hidden">
-                  <div className="aspect-square animate-pulse bg-gray-200" />
+                  <Skeleton className="aspect-square w-full" />
                   <CardContent className="space-y-2 p-4">
-                    <div className="h-4 animate-pulse rounded bg-gray-200" />
-                    <div className="h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
                   </CardContent>
                 </Card>
               ))}

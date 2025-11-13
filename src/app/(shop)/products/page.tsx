@@ -37,6 +37,7 @@ interface FilterSidebarProps {
   priceRange: number[];
   setPriceRange: (range: number[]) => void;
   formatPrice: (price: number) => string;
+  isLoading?: boolean;
 }
 
 const FilterSidebar: React.FC<FilterSidebarProps> = ({
@@ -46,6 +47,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   priceRange,
   setPriceRange,
   formatPrice,
+  isLoading = false,
 }) => (
   <div className="space-y-6">
     {/* Categories Filter */}
@@ -54,51 +56,63 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         <Filter className="h-4 w-4" />
         Categories
       </h3>
-      <div className="space-y-2">
-        <Button
-          variant={selectedCategory === undefined ? 'default' : 'outline'}
-          className="w-full justify-start"
-          onClick={() => onCategoryChange(undefined)}
-        >
-          All Products
-        </Button>
-        {categories.map((category) => (
-          <div key={category.id} className="space-y-1">
-            <Button
-              variant={selectedCategory === category.id ? 'default' : 'outline'}
-              className="w-full justify-start"
-              onClick={() => onCategoryChange(category.id)}
-            >
-              {category.name}
-            </Button>
-            {category.children?.map((subCat) => (
-              <div key={subCat.id} className="ml-4 space-y-1">
-                <Button
-                  variant={selectedCategory === subCat.id ? 'default' : 'ghost'}
-                  size="sm"
-                  className="w-full justify-start text-sm"
-                  onClick={() => onCategoryChange(subCat.id)}
-                >
-                  {subCat.name}
-                </Button>
-                {subCat.children?.map((childCat) => (
+      {isLoading ? (
+        <div className="space-y-2">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-10 w-full" />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <Button
+            variant={selectedCategory === undefined ? 'default' : 'outline'}
+            className="w-full justify-start"
+            onClick={() => onCategoryChange(undefined)}
+          >
+            All Products
+          </Button>
+          {categories.map((category) => (
+            <div key={category.id} className="space-y-1">
+              <Button
+                variant={
+                  selectedCategory === category.id ? 'default' : 'outline'
+                }
+                className="w-full justify-start"
+                onClick={() => onCategoryChange(category.id)}
+              >
+                {category.name}
+              </Button>
+              {category.children?.map((subCat) => (
+                <div key={subCat.id} className="ml-4 space-y-1">
                   <Button
-                    key={childCat.id}
                     variant={
-                      selectedCategory === childCat.id ? 'default' : 'ghost'
+                      selectedCategory === subCat.id ? 'default' : 'ghost'
                     }
                     size="sm"
-                    className="ml-4 w-full justify-start text-xs"
-                    onClick={() => onCategoryChange(childCat.id)}
+                    className="w-full justify-start text-sm"
+                    onClick={() => onCategoryChange(subCat.id)}
                   >
-                    {childCat.name}
+                    {subCat.name}
                   </Button>
-                ))}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+                  {subCat.children?.map((childCat) => (
+                    <Button
+                      key={childCat.id}
+                      variant={
+                        selectedCategory === childCat.id ? 'default' : 'ghost'
+                      }
+                      size="sm"
+                      className="ml-4 w-full justify-start text-xs"
+                      onClick={() => onCategoryChange(childCat.id)}
+                    >
+                      {childCat.name}
+                    </Button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
 
     {/* Price Range Filter */}
@@ -122,7 +136,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   </div>
 );
 
-function ProductsContent() {
+export default function ProductsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -162,7 +176,8 @@ function ProductsContent() {
       maxPrice: priceRange[1],
     });
 
-  const { data: categoriesData } = useGetRootCategoriesQuery();
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useGetRootCategoriesQuery();
 
   const products = productsData?.data?.content || [];
   const totalPages = productsData?.data?.totalPages || 0;
@@ -184,6 +199,7 @@ function ProductsContent() {
                   priceRange={priceRange}
                   setPriceRange={setPriceRange}
                   formatPrice={formatPrice}
+                  isLoading={categoriesLoading}
                 />
               </CardContent>
             </Card>
@@ -218,6 +234,7 @@ function ProductsContent() {
                         priceRange={priceRange}
                         setPriceRange={setPriceRange}
                         formatPrice={formatPrice}
+                        isLoading={categoriesLoading}
                       />
                     </div>
                   </SheetContent>
@@ -332,21 +349,5 @@ function ProductsContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function ProductsPage() {
-  return (
-    <Suspense
-      fallback={
-        <div>
-          <div className="container mx-auto px-4 py-8">
-            <div className="text-center">Loading...</div>
-          </div>
-        </div>
-      }
-    >
-      <ProductsContent />
-    </Suspense>
   );
 }

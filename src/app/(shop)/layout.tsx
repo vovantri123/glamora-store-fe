@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -48,7 +48,13 @@ export default function UserLayout({ children }: UserLayoutProps) {
   const dispatch = useAppDispatch();
   const [logoutApi] = useLogoutMutation();
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+
+  // Prevent hydration mismatch by only rendering auth-dependent UI after mount ở client
+  useEffect(() => {
+    setIsMounted(true); //  Chỉ chạy ở client
+  }, []);
 
   // Fetch data
   const { data: categoriesData, isLoading: categoriesLoading } =
@@ -66,7 +72,7 @@ export default function UserLayout({ children }: UserLayoutProps) {
 
   const handleLogout = async () => {
     try {
-      // Get refresh token
+      // Get refresh tokenta
       const refreshToken =
         localStorage.getItem('refreshToken') ||
         sessionStorage.getItem('refreshToken');
@@ -157,16 +163,25 @@ export default function UserLayout({ children }: UserLayoutProps) {
               <Link href="/cart" className="relative">
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingCart className="h-6 w-6" />
-                  {cartItemsCount > 0 && (
-                    <Badge className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center bg-red-500 p-0">
-                      {cartItemsCount}
-                    </Badge>
+                  {!isMounted ? (
+                    <Skeleton className="absolute -right-1 -top-1 h-5 w-5 rounded-full" />
+                  ) : (
+                    cartItemsCount > 0 && (
+                      <Badge className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center bg-red-500 p-0">
+                        {cartItemsCount}
+                      </Badge>
+                    )
                   )}
                 </Button>
               </Link>
 
-              {/* User Menu */}
-              {isAuthenticated ? (
+              {/* User Menu - only render after mount to prevent hydration mismatch */}
+              {!isMounted ? (
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <Skeleton className="hidden h-4 w-20 md:block" />
+                </div>
+              ) : isAuthenticated ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger className="flex items-center gap-2 rounded-md px-3 py-2 transition-colors hover:bg-gray-100 focus:outline-none">
                     <Avatar className="h-8 w-8">
