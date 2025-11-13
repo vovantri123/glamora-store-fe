@@ -3,7 +3,6 @@
 import React, { useState, useMemo, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Filter } from 'lucide-react';
-import UserLayout from '@/components/layout/UserLayout';
 import ProductCard from '@/features/product/components/ProductCard';
 import { useGetProductsQuery } from '@/features/product/api/productApi';
 import {
@@ -170,7 +169,7 @@ function ProductsContent() {
   const categories = categoriesData?.data || [];
 
   return (
-    <UserLayout>
+    <div>
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <div className="flex gap-8">
@@ -332,7 +331,7 @@ function ProductsContent() {
           </div>
         </div>
       </div>
-    </UserLayout>
+    </div>
   );
 }
 
@@ -340,11 +339,11 @@ export default function ProductsPage() {
   return (
     <Suspense
       fallback={
-        <UserLayout>
+        <div>
           <div className="container mx-auto px-4 py-8">
             <div className="text-center">Loading...</div>
           </div>
-        </UserLayout>
+        </div>
       }
     >
       <ProductsContent />

@@ -38,16 +38,15 @@ import {
 } from '@/features/auth/api/authApi';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function UserLayout({
-  children,
-}: {
+interface UserLayoutProps {
   children: React.ReactNode;
-}) {
+}
+
+export default function UserLayout({ children }: UserLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [logoutApi] = useLogoutMutation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
@@ -222,20 +221,6 @@ export default function UserLayout({
                   </Button>
                 </div>
               )}
-
-              {/* Mobile Menu Toggle */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                {mobileMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </Button>
             </div>
           </div>
 
@@ -243,8 +228,8 @@ export default function UserLayout({
           <nav className="border-t">
             {categoriesLoading ? (
               <div className="flex gap-6 py-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <Skeleton key={i} className="h-6 w-24" />
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Skeleton key={i} className="h-6 w-28" />
                 ))}
               </div>
             ) : (
@@ -325,44 +310,6 @@ export default function UserLayout({
           </nav>
         </div>
       </header>
-
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="border-b bg-white shadow-lg md:hidden">
-          <div className="container mx-auto px-4 py-4">
-            {categories.map((category) => (
-              <div key={category.id} className="mb-4">
-                <h3 className="mb-2 font-semibold">{category.name}</h3>
-                {category.children.map((subCategory) => (
-                  <div key={subCategory.id} className="mb-2 ml-4">
-                    <Link
-                      href={`/?categoryId=${subCategory.id}`}
-                      className="text-sm text-gray-700 hover:text-orange-600"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {subCategory.name}
-                    </Link>
-                    {subCategory.children.length > 0 && (
-                      <div className="ml-4 mt-1">
-                        {subCategory.children.map((childCategory) => (
-                          <Link
-                            key={childCategory.id}
-                            href={`/?categoryId=${childCategory.id}`}
-                            className="block py-1 text-xs text-gray-600 hover:text-orange-600"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            {childCategory.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Main Content */}
       <main>{children}</main>

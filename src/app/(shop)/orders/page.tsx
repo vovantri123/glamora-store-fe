@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Package, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
-import UserLayout from '@/components/layout/UserLayout';
 import { useGetMyOrdersQuery } from '@/features/order/api/orderApi';
 import { OrderItem } from '@/features/order/components';
 import { Card, CardContent } from '@/components/ui/card';
@@ -239,7 +238,7 @@ function OrdersContent() {
 
 export default function OrdersPage() {
   return (
-    <UserLayout>
+    <div>
       <Suspense
         fallback={
           <div className="container mx-auto px-4 py-8">
@@ -260,6 +259,6 @@ export default function OrdersPage() {
       >
         <OrdersContent />
       </Suspense>
-    </UserLayout>
+    </div>
   );
 }

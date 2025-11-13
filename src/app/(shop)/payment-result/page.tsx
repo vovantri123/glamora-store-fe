@@ -4,7 +4,6 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
-import UserLayout from '@/components/layout/UserLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/lib/utils';
@@ -144,7 +143,7 @@ function PaymentResultContent() {
 
 export default function PaymentResultPage() {
   return (
-    <UserLayout>
+    <div>
       <Suspense
         fallback={
           <div className="container mx-auto px-4 py-16">
@@ -157,6 +156,6 @@ export default function PaymentResultPage() {
       >
         <PaymentResultContent />
       </Suspense>
-    </UserLayout>
+    </div>
   );
 }

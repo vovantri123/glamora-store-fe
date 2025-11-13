@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
-import UserLayout from '@/components/layout/UserLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -75,7 +74,7 @@ export default function ContactPage() {
   ];
 
   return (
-    <UserLayout>
+    <div>
       <div className="min-h-screen">
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-orange-50 via-white to-red-50 py-20">
@@ -306,6 +305,6 @@ export default function ContactPage() {
           </div>
         </section>
       </div>
-    </UserLayout>
+    </div>
   );
 }

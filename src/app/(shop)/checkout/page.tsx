@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
-import UserLayout from '@/components/layout/UserLayout';
 import AddressSelector from '@/features/address/components/AddressSelector';
 import {
   ShippingAddressCard,
@@ -52,16 +51,16 @@ export default function CheckoutPage() {
 
   if (!cart) {
     return (
-      <UserLayout>
+      <div>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading...</div>
         </div>
-      </UserLayout>
+      </div>
     );
   }
 
   return (
-    <UserLayout>
+    <div>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
@@ -128,6 +127,6 @@ export default function CheckoutPage() {
           />
         )}
       </div>
-    </UserLayout>
+    </div>
   );
 }

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import UserLayout from '@/components/layout/UserLayout';
+
 import { useGetProductByIdQuery } from '@/features/product/api/productApi';
 import { ProductDetail } from '@/features/product/components';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,7 @@ export default function ProductDetailPage() {
 
   if (isLoading) {
     return (
-      <UserLayout>
+      <div>
         <div className="container mx-auto px-4 py-8">
           <div className="grid gap-8 lg:grid-cols-2">
             <Skeleton className="aspect-square w-full rounded-lg" />
@@ -30,26 +30,26 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </div>
-      </UserLayout>
+      </div>
     );
   }
 
   if (!product) {
     return (
-      <UserLayout>
+      <div>
         <div className="container mx-auto px-4 py-16 text-center">
           <h2 className="mb-4 text-2xl font-bold">Product not found</h2>
           <Button asChild>
             <Link href="/products">Browse Products</Link>
           </Button>
         </div>
-      </UserLayout>
+      </div>
     );
   }
 
   return (
-    <UserLayout>
+    <div>
       <ProductDetail product={product} />
-    </UserLayout>
+    </div>
   );
 }

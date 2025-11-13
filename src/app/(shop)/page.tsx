@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { TrendingUp, Shield, Truck, Award, ChevronRight } from 'lucide-react';
-import UserLayout from '@/components/layout/UserLayout';
+
 import ProductCard from '@/features/product/components/ProductCard';
 import { useGetProductsQuery } from '@/features/product/api/productApi';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,7 +22,7 @@ export default function HomePage() {
   const featuredProducts = featuredData?.data?.content || [];
 
   return (
-    <UserLayout>
+    <div>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-orange-50 via-white to-orange-50 py-20 lg:py-32">
         <div className="container mx-auto px-4">
@@ -252,6 +252,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-    </UserLayout>
+    </div>
   );
 }

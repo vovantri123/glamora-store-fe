@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Trash2 } from 'lucide-react';
-import UserLayout from '@/components/layout/UserLayout';
 import {
   useGetCartQuery,
   useClearCartMutation,
@@ -32,7 +31,7 @@ export default function CartPage() {
 
   if (isLoading) {
     return (
-      <UserLayout>
+      <div>
         <div className="container mx-auto px-4 py-8">
           <div className="grid gap-8 lg:grid-cols-3">
             <div className="space-y-4 lg:col-span-2">
@@ -55,22 +54,22 @@ export default function CartPage() {
             </div>
           </div>
         </div>
-      </UserLayout>
+      </div>
     );
   }
 
   if (!cart || cart.items.length === 0) {
     return (
-      <UserLayout>
+      <div>
         <div className="container mx-auto px-4 py-16">
           <EmptyCart />
         </div>
-      </UserLayout>
+      </div>
     );
   }
 
   return (
-    <UserLayout>
+    <div>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -108,6 +107,6 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-    </UserLayout>
+    </div>
   );
 }

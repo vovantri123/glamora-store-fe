@@ -15,7 +15,6 @@ import {
   Target,
   Globe,
 } from 'lucide-react';
-import UserLayout from '@/components/layout/UserLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -83,7 +82,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <UserLayout>
+    <div>
       <div className="min-h-screen">
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-orange-50 via-white to-red-50 py-20">
@@ -280,6 +279,6 @@ export default function AboutPage() {
           </div>
         </section>
       </div>
-    </UserLayout>
+    </div>
   );
 }
