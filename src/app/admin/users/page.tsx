@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Plus, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import {
   UserTable,
   UserFormDialog,
@@ -22,6 +22,7 @@ import {
   useGetUsersQuery,
   User,
 } from '@/features/user';
+import { CustomPagination } from '@/components/common/CustomPagination';
 
 export default function UsersPage() {
   const [page, setPage] = useState(0);
@@ -74,60 +75,6 @@ export default function UsersPage() {
     setPasswordDialog({ open: true, user });
   };
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    return (
-      <div className="flex items-center justify-center">
-        <div className="flex items-center gap-1">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            disabled={page === 0}
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Previous
-          </Button>
-
-          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-            let pageNum;
-            if (totalPages <= 5) {
-              pageNum = i;
-            } else if (page < 3) {
-              pageNum = i;
-            } else if (page > totalPages - 4) {
-              pageNum = totalPages - 5 + i;
-            } else {
-              pageNum = page - 2 + i;
-            }
-
-            return (
-              <Button
-                key={pageNum}
-                variant={page === pageNum ? 'default' : 'outline'}
-                size="sm"
-                className="w-9"
-                onClick={() => setPage(pageNum)}
-              >
-                {pageNum + 1}
-              </Button>
-            );
-          })}
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-            disabled={page >= totalPages - 1}
-          >
-            Next
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-    );
-  };
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -251,7 +198,17 @@ export default function UsersPage() {
                 onUpdatePassword={handleUpdatePassword}
                 isDeleted={isDeleted}
               />
-              {renderPagination()}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex justify-center">
+                  <CustomPagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                  />
+                </div>
+              )}
             </>
           )}
         </CardContent>

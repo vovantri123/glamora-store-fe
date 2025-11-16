@@ -20,7 +20,7 @@ interface ConfirmDialogProps {
   variant?: 'default' | 'destructive';
 }
 
-export function ConfirmDialog({
+function ConfirmDialog({
   open,
   onOpenChange,
   onConfirm,
@@ -54,3 +54,5 @@ export function ConfirmDialog({
     </AlertDialog>
   );
 }
+
+export { ConfirmDialog };
