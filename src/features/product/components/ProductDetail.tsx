@@ -24,70 +24,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   );
   const categoryPath = categoryPathData?.data || [];
 
-  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
-    null
-  );
-  const [selectedAttributes, setSelectedAttributes] = useState<
-    Record<string, string>
-  >({});
-
-  const selectedVariant =
-    product.variants.find((v) => v.id === selectedVariantId) ||
-    product.variants[0];
-
-  // Get unique attribute names and values
-  const getUniqueAttributes = () => {
-    const attributesMap: Record<string, Set<string>> = {};
-
-    product.variants.forEach((variant) => {
-      variant.attributes.forEach((attr) => {
-        if (!attributesMap[attr.attributeName]) {
-          attributesMap[attr.attributeName] = new Set();
-        }
-        attributesMap[attr.attributeName].add(attr.attributeValue);
-      });
-    });
-
-    return Object.entries(attributesMap).reduce(
-      (acc, [name, values]) => {
-        acc[name] = Array.from(values);
-        return acc;
-      },
-      {} as Record<string, string[]>
-    );
-  };
-
-  const uniqueAttributes = getUniqueAttributes();
-
-  // Find matching variant
-  const findMatchingVariant = (attributes: Record<string, string>) => {
-    return product.variants.find((variant) => {
-      return Object.entries(attributes).every(([attrName, attrValue]) => {
-        return variant.attributes.some(
-          (attr) =>
-            attr.attributeName === attrName && attr.attributeValue === attrValue
-        );
-      });
-    });
-  };
-
-  // Handle attribute selection
-  const handleAttributeSelect = (
-    attributeName: string,
-    attributeValue: string
-  ) => {
-    const newSelectedAttributes = {
-      ...selectedAttributes,
-      [attributeName]: attributeValue,
-    };
-    setSelectedAttributes(newSelectedAttributes);
-
-    const matchingVariant = findMatchingVariant(newSelectedAttributes);
-    if (matchingVariant) {
-      setSelectedVariantId(matchingVariant.id);
-    }
-  };
-
   const images =
     product.images.length > 0
       ? product.images
@@ -129,17 +65,16 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
         {/* Product Info */}
         <div className="space-y-6">
-          <ProductInfo product={product} selectedVariant={selectedVariant} />
-
-          {/* Variant Selection */}
-          <ProductVariantSelector
-            uniqueAttributes={uniqueAttributes}
-            selectedAttributes={selectedAttributes}
-            onAttributeSelect={handleAttributeSelect}
+          <ProductInfo
+            product={product}
+            selectedVariant={product.variants[0]}
           />
 
+          {/* Variant Selection - Display available options */}
+          <ProductVariantSelector product={product} />
+
           {/* Add to Cart */}
-          <AddToCartSection selectedVariant={selectedVariant} />
+          <AddToCartSection product={product} />
 
           {/* Trust Badges */}
           <div className="grid grid-cols-3 gap-4 rounded-lg bg-gradient-to-br from-gray-50 to-orange-50 p-6">
@@ -167,7 +102,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         productId={product.id}
         productName={product.name}
         description={product.description}
-        selectedVariantId={selectedVariantId}
+        selectedVariantId={product.variants[0]?.id}
       />
     </div>
   );

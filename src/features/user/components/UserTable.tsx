@@ -29,6 +29,8 @@ import {
   Key,
   Shield,
   RotateCcw,
+  Crown,
+  User as UserIcon,
 } from 'lucide-react';
 import { User, Gender } from '../types/user.types';
 import { useDeleteUserMutation, useActivateUserMutation } from '../api/userApi';
@@ -91,7 +93,9 @@ export function UserTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>User</TableHead>
+              <TableHead className="w-[60px] text-center">ID</TableHead>
+              <TableHead className="text-center">Avatar</TableHead>
+              <TableHead>Full Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Gender</TableHead>
               <TableHead>Date of Birth</TableHead>
@@ -110,25 +114,19 @@ export function UserTable({
             ) : (
               users.map((user) => (
                 <TableRow key={user.id}>
+                  <TableCell className="text-center font-medium">
+                    {user.id}
+                  </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarImage src={user.avatar} />
-                        <AvatarFallback>
-                          {user.fullName
-                            .split(' ')
-                            .map((n) => n[0])
-                            .join('')
-                            .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className="font-medium">{user.fullName}</div>
-                        <div className="text-sm text-muted-foreground">
-                          ID: {user.id}
-                        </div>
-                      </div>
-                    </div>
+                    <Avatar className="mx-auto h-12 w-12 ring-2 ring-primary/20">
+                      <AvatarImage src={user.avatar} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-white">
+                        {user?.fullName?.charAt(0)?.toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </TableCell>
+                  <TableCell>
+                    <div className="font-medium">{user.fullName}</div>
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
@@ -152,16 +150,28 @@ export function UserTable({
                     {user.dob ? format(new Date(user.dob), 'dd/MM/yyyy') : '-'}
                   </TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-2">
                       {user.roles.map((role) => (
-                        <Badge key={role.name} variant="secondary">
-                          {role.name}
-                        </Badge>
+                        <div
+                          key={role.name}
+                          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
+                            role.name === 'ADMIN'
+                              ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-sm'
+                              : 'bg-gradient-to-r from-neutral-100 to-neutral-200 text-neutral-700 dark:from-neutral-700 dark:to-neutral-600 dark:text-neutral-200'
+                          }`}
+                        >
+                          {role.name === 'ADMIN' ? (
+                            <Crown className="h-3 w-3" />
+                          ) : (
+                            <UserIcon className="h-3 w-3" />
+                          )}
+                          <span>{role.name}</span>
+                        </div>
                       ))}
                     </div>
                   </TableCell>
                   <TableCell>
-                    {format(new Date(user.createdAt), 'dd/MM/yyyy HH:mm')}
+                    {format(new Date(user.createdAt), 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -224,7 +234,7 @@ export function UserTable({
         onOpenChange={(open) =>
           setDeleteDialog({ open, userId: deleteDialog.userId })
         }
-        // khi người dùng bấm close, ESC, click outside, hoặc
+        // khi người dùng bấm close, ESC, hoặc
         // dialog thay đổi state → callback nhận giá trị mới của open.
         onConfirm={handleDelete}
         title="Confirm Deletion"

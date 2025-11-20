@@ -195,7 +195,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content */}
       <div className="lg:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white/80 px-6 backdrop-blur-sm dark:bg-slate-950/80">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-white px-6 backdrop-blur-sm dark:bg-slate-950">
           <Button
             variant="ghost"
             size="icon"

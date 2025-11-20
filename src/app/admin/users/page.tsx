@@ -27,8 +27,8 @@ import { CustomPagination } from '@/components/common/CustomPagination';
 export default function UsersPage() {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
-  const [sortBy, setSortBy] = useState('createdAt');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+  const [sortBy, setSortBy] = useState('id');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleted, setIsDeleted] = useState(false);
 
@@ -133,9 +133,10 @@ export default function UsersPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="createdAt">Created</SelectItem>
+                    <SelectItem value="id">ID</SelectItem>
                     <SelectItem value="fullName">Name</SelectItem>
                     <SelectItem value="email">Email</SelectItem>
+                    <SelectItem value="createdAt">Created</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -176,7 +177,7 @@ export default function UsersPage() {
                     <SelectItem value="5">5</SelectItem>
                     <SelectItem value="10">10</SelectItem>
                     <SelectItem value="20">20</SelectItem>
-                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

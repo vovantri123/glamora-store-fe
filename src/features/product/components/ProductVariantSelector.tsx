@@ -1,48 +1,63 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import type { ProductVariant } from '@/features/product/api/productApi';
+import type { Product } from '@/features/product/api/productApi';
 
 interface ProductVariantSelectorProps {
-  uniqueAttributes: Record<string, string[]>;
-  selectedAttributes: Record<string, string>;
-  onAttributeSelect: (attributeName: string, attributeValue: string) => void;
+  product: Product;
 }
 
 export default function ProductVariantSelector({
-  uniqueAttributes,
-  selectedAttributes,
-  onAttributeSelect,
+  product,
 }: ProductVariantSelectorProps) {
+  // Get unique attribute names and their values from all variants
+  const getUniqueAttributes = () => {
+    const attributesMap: Record<string, Set<string>> = {};
+
+    product.variants.forEach((variant) => {
+      variant.attributes.forEach((attr) => {
+        if (!attributesMap[attr.attributeName]) {
+          attributesMap[attr.attributeName] = new Set();
+        }
+        attributesMap[attr.attributeName].add(attr.attributeValue);
+      });
+    });
+
+    return Object.entries(attributesMap).reduce(
+      (acc, [name, values]) => {
+        acc[name] = Array.from(values);
+        return acc;
+      },
+      {} as Record<string, string[]>
+    );
+  };
+
+  const uniqueAttributes = getUniqueAttributes();
+
   if (Object.keys(uniqueAttributes).length === 0) {
     return null;
   }
 
   return (
     <div className="space-y-4">
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+        Available Options
+      </h3>
       {Object.entries(uniqueAttributes).map(([attributeName, values]) => (
         <div key={attributeName}>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-700">
-            {attributeName}
-          </h3>
+          <p className="mb-2 text-sm font-medium text-gray-600">
+            {attributeName}:
+          </p>
           <div className="flex flex-wrap gap-2">
-            {values.map((value) => {
-              const isSelected = selectedAttributes[attributeName] === value;
-              return (
-                <Badge
-                  key={value}
-                  variant={isSelected ? 'default' : 'outline'}
-                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-all ${
-                    isSelected
-                      ? 'bg-orange-600 text-white hover:bg-orange-700'
-                      : 'border-gray-300 bg-white text-gray-700 hover:border-orange-400 hover:bg-orange-50'
-                  }`}
-                  onClick={() => onAttributeSelect(attributeName, value)}
-                >
-                  {value}
-                </Badge>
-              );
-            })}
+            {values.map((value) => (
+              <Badge
+                key={value}
+                variant="outline"
+                className="border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700"
+              >
+                {value}
+              </Badge>
+            ))}
           </div>
         </div>
       ))}
